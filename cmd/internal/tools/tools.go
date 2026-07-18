@@ -220,3 +220,22 @@ func GetDLLName() string {
 	}
 	return libName
 }
+
+func GoVersionGreaterOrEqual(currentVersion, targetVersion string) bool {
+	cv := strings.Split(currentVersion, ".")
+	tv := strings.Split(targetVersion, ".")
+	if len(cv) < 2 || len(tv) < 2 {
+		return false
+	}
+	currentMajor := ToInt(cv[0])
+	currentMinor := ToInt(cv[1])
+	targetMajor := ToInt(tv[0])
+	targetMinor := ToInt(tv[1])
+	if currentMajor > targetMajor {
+		return true
+	}
+	if currentMajor == targetMajor && currentMinor >= targetMinor {
+		return true
+	}
+	return false
+}

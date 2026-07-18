@@ -12,16 +12,18 @@ package env
 
 import (
 	"encoding/json"
-	"github.com/energye/energy/v2/cmd/internal/consts"
-	"github.com/energye/energy/v2/cmd/internal/term"
-	"github.com/energye/energy/v2/cmd/internal/tools"
-	"github.com/energye/energy/v2/cmd/internal/tools/homedir"
 	"io/ioutil"
 	"net/url"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	"github.com/energye/energy/v2/cmd/internal/consts"
+	"github.com/energye/energy/v2/cmd/internal/term"
+	"github.com/energye/energy/v2/cmd/internal/tools"
+	toolsCommand "github.com/energye/energy/v2/cmd/internal/tools/cmd"
+	"github.com/energye/energy/v2/cmd/internal/tools/homedir"
 )
 
 var GlobalDevEnvConfig *EnergyConfig
@@ -264,4 +266,25 @@ func (m *EnergyConfig) UPXCMD() string {
 		return upx
 	}
 	return ""
+}
+
+func (m *EnergyConfig) GoVersion() string {
+	var version string
+	cmd := toolsCommand.NewCMD()
+	cmd.IsPrint = false
+	cmd.MessageCallback = func(bytes []byte, err error) {
+		data := string(bytes)
+		if strings.Index(data, "go version") != -1 {
+			d := strings.Split(data, " ")
+			if len(d) == 4 {
+				version = d[2][2:]
+			}
+		}
+	}
+	gocmd := m.GoCMD()
+	if gocmd != "" {
+		cmd.Command(gocmd, "version")
+	}
+	cmd.Close()
+	return version
 }

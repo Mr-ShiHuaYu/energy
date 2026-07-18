@@ -16,6 +16,11 @@ package build
 import (
 	"errors"
 	"flag"
+	"os"
+	"path/filepath"
+	"runtime"
+	"strings"
+
 	"github.com/energye/energy/v2/cmd/internal/assets"
 	"github.com/energye/energy/v2/cmd/internal/command"
 	"github.com/energye/energy/v2/cmd/internal/env"
@@ -24,10 +29,6 @@ import (
 	"github.com/energye/energy/v2/cmd/internal/term"
 	"github.com/energye/energy/v2/cmd/internal/tools"
 	toolsCommand "github.com/energye/energy/v2/cmd/internal/tools/cmd"
-	"os"
-	"path/filepath"
-	"runtime"
-	"strings"
 )
 
 // 构建windows执行程序
@@ -78,7 +79,9 @@ func build(c *command.Config, proj *project.Project) (err error) {
 		args = append(args, "-tags", "prod")
 		args = append(args, "-ldflags", "-s -w -H windowsgui")
 	}
-	args = append(args, "-trimpath")
+	if tools.GoVersionGreaterOrEqual(env.GlobalDevEnvConfig.GoVersion(), "1.13") {
+		args = append(args, "-trimpath")
+	}
 	args = append(args, "-o", outputFilename)
 	// GOOS=windows GOARCH=386
 	if c.Build.OS != "" {

@@ -15,14 +15,15 @@ package build
 
 import (
 	"flag"
+	"os"
+	"strings"
+
 	"github.com/energye/energy/v2/cmd/internal/command"
 	"github.com/energye/energy/v2/cmd/internal/env"
 	"github.com/energye/energy/v2/cmd/internal/project"
 	"github.com/energye/energy/v2/cmd/internal/term"
 	"github.com/energye/energy/v2/cmd/internal/tools"
 	toolsCommand "github.com/energye/energy/v2/cmd/internal/tools/cmd"
-	"os"
-	"strings"
 )
 
 func build(c *command.Config, proj *project.Project) (err error) {
@@ -59,7 +60,9 @@ func build(c *command.Config, proj *project.Project) (err error) {
 		args = append(args, "-tags", "prod")
 		args = append(args, "-ldflags", "-s -w")
 	}
-	args = append(args, "-trimpath")
+	if tools.GoVersionGreaterOrEqual(env.GlobalDevEnvConfig.GoVersion(), "1.13") {
+		args = append(args, "-trimpath")
+	}
 	args = append(args, "-o", outputFilename)
 	// GOOS=windows GOARCH=386
 	if c.Build.OS != "" {
