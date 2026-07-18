@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/energye/energy/v2/cef"
 	"github.com/energye/energy/v2/consts"
 	"github.com/energye/energy/v2/consts/messages"

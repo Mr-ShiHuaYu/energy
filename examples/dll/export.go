@@ -5,14 +5,15 @@ package main
 
 import "C"
 import (
+	"path/filepath"
+	"runtime"
+
 	"github.com/energye/energy/v2/cef/config"
 	"github.com/energye/golcl/energy/inits"
 	"github.com/energye/golcl/lcl/api"
 	"github.com/energye/golcl/lcl/types"
 	"github.com/energye/golcl/lcl/types/messages"
 	"github.com/energye/golcl/pkgs/libname"
-	"path/filepath"
-	"runtime"
 
 	"github.com/energye/golcl/lcl/rtl"
 

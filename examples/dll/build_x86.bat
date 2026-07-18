@@ -2,9 +2,8 @@
 echo set env
 set GOARCH=386
 set CGO_ENABLED=1
-set mingw64=%MinGW32%
-set PATH=%PATH%;%MinGW32%;%MinGW32%\bin
 
+set PATH=D:\5CPP\RedPanda-CPP\mingw32\bin;%PATH%;
 echo build 
 go build -i -ldflags="-s -w" -buildmode=c-shared  -o libenergy.dll
 

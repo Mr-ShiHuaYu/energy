@@ -6,6 +6,9 @@ package main
 import "C"
 
 import (
+	"path/filepath"
+	"runtime"
+
 	"github.com/energye/energy/v2/cef"
 	"github.com/energye/energy/v2/cef/config"
 	"github.com/energye/energy/v2/cef/process"
@@ -15,8 +18,6 @@ import (
 	"github.com/energye/golcl/lcl/types"
 	"github.com/energye/golcl/lcl/win"
 	"github.com/energye/golcl/pkgs/libname"
-	"path/filepath"
-	"runtime"
 )
 
 //export initCEFApplication

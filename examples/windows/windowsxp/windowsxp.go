@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/energye/energy/v2/cef"
+	"github.com/energye/energy/v2/logger"
 	_ "github.com/energye/energy/v2/examples/syso"
 	"github.com/energye/energy/v2/pkgs/assetserve"
 )
@@ -34,6 +35,8 @@ import (
 //go:generate energy bindata --fs --o=pkg/libs/libs.go --pkg=libs --paths=./libs
 
 func main() {
+	logger.SetEnable(true)
+	logger.SetLevel(logger.LDebug)
 	//libsFS := libs.AssetFile()
 	//resourceFS := assets.AssetFile()
 	//全局初始化 每个应用都必须调用的

@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+
 	"github.com/energye/energy/v2/cef"
 	_ "github.com/energye/energy/v2/examples/syso"
 	"github.com/energye/energy/v2/examples/vue/src"
@@ -19,7 +20,7 @@ func main() {
 
 	app := cef.NewApplication()
 	cef.BrowserWindow.Config.Title = "Energy Vue"
-	cef.BrowserWindow.Config.EnableHideCaption = true
+	cef.BrowserWindow.Config.EnableHideCaption = false
 	if env.ENV == "DEV" {
 		println("DEV")
 		cef.BrowserWindow.Config.Url = "http://localhost:5173"
@@ -31,11 +32,12 @@ func main() {
 			ResRootDir: "resources",
 			FS:         resources,
 		}.Build())
-		cfg := cef.BrowserWindow.Config.ChromiumConfig()
-		cfg.SetEnableMenu(false)
-		cfg.SetEnableDevTools(false)
-		cfg.SetEnableViewSource(false)
+
 	}
+	cfg := cef.BrowserWindow.Config.ChromiumConfig()
+	cfg.SetEnableMenu(false)
+	cfg.SetEnableDevTools(false)
+	cfg.SetEnableViewSource(false)
 
 	cef.SetBrowserProcessStartAfterCallback(src.BrowserProcessStart)
 	cef.BrowserWindow.SetBrowserInit(src.BrowserInit)
