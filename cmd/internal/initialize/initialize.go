@@ -145,7 +145,9 @@ func generaProject(c *command.Config) error {
 	}
 
 	// 创建 main.go
-	if err := createFile(fmt.Sprintf("assets/initialize/main.go.%s", c.Init.ResLoad), "main.go", nil, 0666); err != nil {
+	data = make(map[string]interface{})
+	data["Name"] = c.Init.Name
+	if err := createFile(fmt.Sprintf("assets/initialize/main.go.%s", c.Init.ResLoad), "main.go", data, 0666); err != nil {
 		return err
 	}
 
@@ -198,6 +200,10 @@ func generaProject(c *command.Config) error {
 		// cmd go mod tidy
 		term.Logger.Info("Update Energy dependencies", term.Logger.Args("command-line", "go mod tidy", "version", c.Init.Version))
 		cmd.Command("go", "mod", "tidy")
+
+		// cmd go generate
+		term.Logger.Info("Generate project assets", term.Logger.Args("command-line", "go generate"))
+		cmd.Command("go", "generate")
 	}
 	cmd.Close()
 	return nil

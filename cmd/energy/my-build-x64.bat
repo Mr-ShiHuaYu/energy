@@ -4,7 +4,7 @@ go version
 go mod tidy
 set GOARCH=amd64
 set GOOS=windows
-rm energy-windows64.exe
-go build -trimpath -ldflags "-s -w" -o energy-windows64.exe energy.go
+rm e.exe
+go build -trimpath -ldflags "-s -w" -o e.exe energy.go
 g use 1.11.13-386
 pause

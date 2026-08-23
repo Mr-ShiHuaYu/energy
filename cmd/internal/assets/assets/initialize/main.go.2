@@ -1,25 +1,40 @@
 package main
 
 import (
-	"embed"
+	"{{.Name}}/pkg/assets"
+
 	"github.com/energye/energy/v2/cef"
 	"github.com/energye/energy/v2/cef/ipc"
+	"github.com/energye/energy/v2/logger"
 	"github.com/energye/golcl/lcl"
 	"github.com/energye/golcl/lcl/rtl/version"
 )
 
-//go:embed resources
-var resources embed.FS
+
+// 以下命令生成静态资源“字节数据”进行绑定，使用 go 命令: go generate
+/*
+ 说明:
+  固定 //go:generate energy bindata --fs
+  可变  --debug 调试模式，生产要删除 --o=输出目录, --pkg=包名,  --paths=打包目录可多个‘,‘豆号分隔
+*/
+// 静态资源
+//go:generate energy bindata --fs --debug --o=pkg/assets/assets.go --pkg=assets --paths=./resources/...
+// 有动态链接库时开启 //go:generate energy bindata --fs --debug --o=pkg/libs/libs.go --pkg=libs --paths=./libs
 
 func main() {
+	logger.SetEnable(true)
+	logger.SetLevel(logger.LDebug)
 	//Global initialization must be called
-	cef.GlobalInit(nil, &resources)
+	//libsFS := libs.AssetFile() // 有动态链接库时开启
+	resourceFS := assets.AssetFile()
+	//cef.GlobalInit(libsFS, resourceFS) // 有动态链接库时开启
+	cef.GlobalInit(nil, resourceFS)
 	//Create an application
 	app := cef.NewApplication()
 	//Local load resources
 	cef.BrowserWindow.Config.LocalResource(cef.LocalLoadConfig{
 		ResRootDir: "resources",
-		FS:         &resources,
+		FS:         resourceFS,
 	}.Build())
 	// run main process and main thread
 	cef.BrowserWindow.SetBrowserInit(browserInit)

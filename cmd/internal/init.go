@@ -18,7 +18,6 @@ import (
 	"github.com/energye/energy/v2/cmd/internal/command"
 	"github.com/energye/energy/v2/cmd/internal/env"
 	"github.com/energye/energy/v2/cmd/internal/initialize"
-	"github.com/energye/energy/v2/cmd/internal/remotecfg"
 	"github.com/energye/energy/v2/cmd/internal/term"
 	"github.com/energye/energy/v2/cmd/internal/tools"
 	"github.com/pterm/pterm"
@@ -56,22 +55,8 @@ func runInit(c *command.Config) error {
 		m.Version = env.GlobalDevEnvConfig.Version
 	}
 	if m.Version == "" {
-		// 尝试使用从远程服务获取最新版本号
-		latestVersion, err := remotecfg.LatestVersion()
-		if err == nil {
-			m.Version = fmt.Sprintf("v%v.%v.%v", latestVersion.Major, latestVersion.Minor, latestVersion.Build)
-		} else {
-			//最后获取失败, 要求输入版本号
-			term.Logger.Error("Failed to retrieve version information from the remote service.")
-			term.Logger.Error(err.Error())
-			var inputVersion string
-			for strings.TrimSpace(inputVersion) == "" {
-				print("Enter energy release. (vx.x.x): ")
-				fmt.Scan(&inputVersion)
-				println()
-			}
-			m.Version = inputVersion
-		}
+		// 使用本地 energy cli 版本号
+		m.Version = fmt.Sprintf("v%v.%v.%v", term.Major, term.Minor, term.Build)
 	}
 	// 修复版本号
 	m.Version = strings.ToLower(m.Version)
